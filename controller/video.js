@@ -33,8 +33,9 @@ const uploadImage = async (req, res) => {
         const name = uuidv4();
         const ext = path.extname(file[key].name);
         const imageName = name + ext;
+        const fileUrl = path.join("files", imageName)
         const filePath = path.join(__dirname, "..", "files", imageName);
-        const image = new ImageModel({ url: filePath});
+        const image = new ImageModel({ url: fileUrl});
         await image.save()
             .then((data) => {
                 file[key].mv(filePath)
@@ -50,9 +51,9 @@ const uploadImage = async (req, res) => {
 const deleteImageById = async(req, res) => {
     const videoId = req.params.id;
 
-    const video = await ImageModel.findById(videoId)
+    await ImageModel.findById(videoId)
         .then(async (data) => {
-            fs.unlink(data.url, (err) => {
+            fs.unlink(path.join(__dirname, "..", data.url), (err) => {
                 if (err) {
                     throw new Error("Could not delete video from file storage");
                 }
