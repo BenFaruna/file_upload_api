@@ -74,7 +74,8 @@ const deleteVideoById = async(req, res) => {
                 return res.status(404).json({ status: "error", message: `${videoId} not found` });
             }
 
-            const filePath = data.url.split("/").at(-1)
+            const urlSplit = data.url.split("/")
+            const filePath = urlSplit[urlSplit.length - 1]
 
             fs.unlink(path.join(__dirname, "..", "files", filePath), (err) => {
                 if (err) {
