@@ -3,7 +3,7 @@ const fileUpload = require("express-fileupload");
 const path = require("path");
 
 const requestEndpoint = require("./middleware/utils");
-const { getAllImages, getImageById, uploadImage, deleteImageById } = require("./controller/video");
+const { getAllVideos, getVideoById, getVideoFile, uploadVideo, deleteVideoById } = require("./controller/video");
 const { filesPayloadExists, fileExtLimiter } = require("./middleware/file_upload");
 
 const app = express();
@@ -15,17 +15,23 @@ app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "index.html"))
 })
 
-router.get("/", getAllImages);
-router.get("/:id", getImageById);
+router.get("/", getAllVideos);
+router.get("/:id", getVideoById);
 router.post("/",
-  fileUpload({ createParentPath: true }),
+  fileUpload({
+    createParentPath: true,
+    useTempFiles : true,
+    tempFileDir : "/tmp/",
+    debug: process.env.DEBUG || false,
+  }),
   filesPayloadExists,
   fileExtLimiter([".mp4", ".webm", ".gif", ".avi", ".mkv"]),
-  uploadImage
+  uploadVideo
 );
-router.delete("/:id", deleteImageById);
+router.delete("/:id", deleteVideoById);
 
 app.use(requestEndpoint);
 app.use("/videos", router);
+app.get("/files/:path", getVideoFile)
 
 module.exports = app

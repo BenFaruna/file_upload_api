@@ -4,7 +4,14 @@ const uuidv4 = require("uuid").v4;
 const ImageModel = require("../model/video");
 
 
-const getAllImages = async (req, res) => {
+const getVideoFile = async (req, res) => {
+    const filePath = req.params.path //.split("/")[-1]
+    console.log(path.join(__dirname, "..", filePath))
+    return res.sendFile(path.join(__dirname, "..", "files", filePath))
+}
+
+
+const getAllVideos = async (req, res) => {
     const images = await ImageModel.find({});
 
     if (images.length < 1) {
@@ -14,7 +21,7 @@ const getAllImages = async (req, res) => {
 }
 
 
-const getImageById = async (req, res) => {
+const getVideoById = async (req, res) => {
     const imageId = req.params.id
 
     ImageModel.findById(imageId)
@@ -30,14 +37,15 @@ const getImageById = async (req, res) => {
     }
 
 
-const uploadImage = async (req, res) => {
+const uploadVideo = async (req, res) => {
     const file = req.files;
     
     await Object.keys(file).forEach(async key => {
         const name = uuidv4();
+        const serverUrl = process.env.SERVER_URL || `http://localhost:${process.env.PORT}/`
         const ext = path.extname(file[key].name);
         const imageName = name + ext;
-        let fileUrl = path.join("files", imageName)
+        let fileUrl = serverUrl + path.join("files", imageName)
 
         if (process.platform == "win32") { 
             fileUrl = fileUrl.replace("\\", "/");
@@ -57,7 +65,7 @@ const uploadImage = async (req, res) => {
 }
 
 
-const deleteImageById = async(req, res) => {
+const deleteVideoById = async(req, res) => {
     const videoId = req.params.id;
 
     await ImageModel.findById(videoId)
@@ -66,7 +74,9 @@ const deleteImageById = async(req, res) => {
                 return res.status(404).json({ status: "error", message: `${videoId} not found` });
             }
 
-            fs.unlink(path.join(__dirname, "..", data.url), (err) => {
+            const filePath = data.url.split("/").at(-1)
+
+            fs.unlink(path.join(__dirname, "..", "files", filePath), (err) => {
                 if (err) {
                     throw new Error("Could not delete video from file storage");
                 }
@@ -83,8 +93,9 @@ const deleteImageById = async(req, res) => {
 
 
 module.exports = {
-    getAllImages,
-    getImageById,
-    uploadImage,
-    deleteImageById,
+    getVideoFile,
+    getAllVideos,
+    getVideoById,
+    uploadVideo,
+    deleteVideoById,
 }
