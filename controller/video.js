@@ -3,9 +3,11 @@ const path = require("path");
 const uuidv4 = require("uuid").v4;
 const ImageModel = require("../model/video");
 
+const sendVideoDetailToQueue = require("../utils/sender");
+
 
 const getVideoFile = async (req, res) => {
-    const filePath = req.params.path //.split("/")[-1]
+    const filePath = req.params.path
     console.log(path.join(__dirname, "..", filePath))
     return res.sendFile(path.join(__dirname, "..", "files", filePath))
 }
@@ -15,7 +17,7 @@ const getAllVideos = async (req, res) => {
     const images = await ImageModel.find({});
 
     if (images.length < 1) {
-        return res.status(404).json({ status: "Error", message: "No images found" });
+        return res.status(404).json({ status: "Error", message: "No video found" });
     }
     return res.status(200).json({ status: "success", data: images });
 }
@@ -56,6 +58,7 @@ const uploadVideo = async (req, res) => {
         await image.save()
             .then((data) => {
                 file[key].mv(filePath)
+                sendVideoDetailToQueue(data);
                 return res.status(201).json({ status: "success", data: data.toJSON() });
             })
             .catch((err) => {
