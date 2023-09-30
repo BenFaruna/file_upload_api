@@ -1,4 +1,5 @@
 const express = require("express");
+const cors = require("cors");
 const fileUpload = require("express-fileupload");
 const path = require("path");
 
@@ -10,6 +11,7 @@ const app = express();
 const router = express.Router();
 
 // app.use(express.static("files"))
+app.use(cors());
 
 app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "index.html"))
