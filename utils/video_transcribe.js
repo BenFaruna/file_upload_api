@@ -2,7 +2,6 @@ const fs = require('fs')
 const { execSync: exec } = require('child_process')
 const { Deepgram } = require('@deepgram/sdk')
 const ffmpegStatic = require('ffmpeg-static')
-// const path = require("path")
 
 require("dotenv").config()
 
@@ -21,12 +20,17 @@ async function ffmpeg(command) {
 }
 
 async function transcribeLocalVideo(filePath) {
-  await ffmpeg(`-hide_banner -y -i "${filePath}" "${filePath}.wav"`)
+  ffmpeg(`-hide_banner -y -i "${filePath}" "${filePath}.wav"`)
+    .catch((err) => {
+      console.log(err);
+      return [];
+    })
 
   const audioFile = {
     buffer: fs.readFileSync(`${filePath}.wav`),
     mimetype: 'audio/wav',
   }
+
   const response = await deepgram.transcription.preRecorded(audioFile, {
     punctuation: true,
   }).then(data => {

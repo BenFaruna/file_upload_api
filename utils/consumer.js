@@ -44,8 +44,14 @@ const messageHandler = async (msg, cb) => {
    const payload = msg.getBody();
    console.log('Message payload', payload);
 
-   await addTranscriptionToDB(payload);
-   cb(); // acknowledging the message
+   addTranscriptionToDB(payload)
+    .then((data) => {
+      console.log(data);
+      cb(null, true); // acknowledging the message
+    })
+    .catch((err) => {
+      cb(err, false);
+    });
 };
 
 consumer.consume('video_transcribe', messageHandler, (err) => {
