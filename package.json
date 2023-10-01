@@ -22,6 +22,8 @@
     "mongoose": "^7.5.3",
     "redis-smq": "^7.2.3",
     "redis-smq-common": "^2.0.0",
+    "swagger-jsdoc": "^6.2.8",
+    "swagger-ui-express": "^5.0.0",
     "uuid": "^9.0.1"
   },
   "devDependencies": {

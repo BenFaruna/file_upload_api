@@ -23,7 +23,7 @@ async function transcribeLocalVideo(filePath) {
   ffmpeg(`-hide_banner -y -i "${filePath}" "${filePath}.wav"`)
     .catch((err) => {
       console.log(err);
-      return [];
+      return {};
     })
 
   const audioFile = {

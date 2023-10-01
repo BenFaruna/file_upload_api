@@ -1,7 +1,10 @@
 const mongoose = require("./setup");
 
 const VideoSchema = new mongoose.Schema({
-    url: String,
+    url: {
+        type: String,
+        required: true,
+    },
     transcript: String,
     words: [{
         word: String,
