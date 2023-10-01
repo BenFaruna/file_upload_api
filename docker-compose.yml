@@ -1,0 +1,25 @@
+version: '3'
+services:
+  express-app:
+    build:
+      context: . # Use the current directory (where the Dockerfile is located)
+    ports:
+      - "3000:3000" # Map the container's port 3000 to the host's port 3000
+    depends_on:
+      - rabbitmq
+    environment:
+      - DB_URL=${DB_URL}
+      - DEEPGRAM_API_KEY=${DEEPGRAM_API_KEY}
+      - RABBIT_URL="amqp://localhost"
+      - PORT=${PORT}
+    volumes:
+      - ./files:/home/app/files
+
+  rabbitmq:
+    image: "rabbitmq:3-management" # Use RabbitMQ with management console
+    ports:
+      - "15672:15672" # Management console port
+      - "5672:5672" # RabbitMQ default port
+    environment:
+      - RABBITMQ_DEFAULT_USER=your_user # RabbitMQ username (change this)
+      - RABBITMQ_DEFAULT_PASS=your_password # RabbitMQ password (change this)
