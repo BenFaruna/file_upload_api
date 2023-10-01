@@ -5,6 +5,7 @@ services:
       context: . # Use the current directory (where the Dockerfile is located)
     ports:
       - "3000:3000" # Map the container's port 3000 to the host's port 3000
+      - "5672:5672"
     depends_on:
       - rabbitmq
     environment:
