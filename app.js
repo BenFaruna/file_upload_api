@@ -26,13 +26,13 @@
  * tags:
  *   name: VideoModel
  *   description: the video manageing API
- * /videos:
+ * /api/videos:
  *    get:
  *      summary: Lists all the videos
  *      tags: [VideoModel]
  *      responses:
  *        200:
- *          description: The list of the books
+ *          description: The list of videos
  *          content:
  *            application/json:
  *              schema:
@@ -42,7 +42,58 @@
  *                    type: string
  *                  data:
  *                    type: array
- *                    $ref: '#model/video'
+ *                    items:
+ *                      message:
+ *                        type: string
+ *                      data:
+  *                       $ref: '#/components/schemas/VideoModel'
+ *    post:
+ *      summary: Uploads a videos
+ *      tags: [VideoModel]
+ *      requestBody:
+ *        required: true
+ *        content:
+ *          video/*:
+ *            schema:
+ *              filename:
+ *                type: file
+ *                format: binary
+ *      responses:
+ *        200:
+ *          description: The details of the uploaded video
+ *          content:
+ *            application/json:
+ *              schema:
+ *                type: object
+ *                items:
+ *                  message:
+ *                    type: string
+ *                  $ref: '#/components/schemas/VideoModel'
+ *
+ * /api/videos/{id}:
+ *    get:
+ *      summary: Lists details of specific video
+ *      tags: [VideoModel]
+ *      parameters:
+ *        - in: path
+ *          name: id
+ *          schema:
+ *            type: string
+ *          required: true
+ *          decription: the video id
+ *          content:
+ *            application/json:
+ *              schema:
+ *                @ref: '#components/schemas/VideoModel'
+ *      responses:
+ *        200:
+ *          description: Details of specific video
+ *          content:
+ *            application/json:
+ *              schema:
+ *                type: object
+ *                items:
+ *                  $ref: '#/components/schemas/VideoModel'
  */
 
 const express = require("express");

@@ -16,9 +16,6 @@ const getVideoFile = async (req, res) => {
 const getAllVideos = async (req, res) => {
     const images = await ImageModel.find({});
 
-    if (images.length < 1) {
-        return res.status(404).json({ status: "Error", message: "No video found" });
-    }
     return res.status(200).json({ status: "success", data: images });
 }
 
