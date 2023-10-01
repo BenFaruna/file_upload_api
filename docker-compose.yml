@@ -1,52 +1,36 @@
 version: '3'
 services:
   express-app:
+    container_name: video_upload_api
     build:
       context: . # Use the current directory (where the Dockerfile is located)
     ports:
       - "3000:3000" # Map the container's port 3000 to the host's port 3000
-      - "5672:5672"
+    restart: on-failure
     depends_on:
+      rabbitmq:
+        condition: service_started
+    links:
       - rabbitmq
     environment:
       - DB_URL=${DB_URL}
       - DEEPGRAM_API_KEY=${DEEPGRAM_API_KEY}
-      - RABBIT_URL="amqp://localhost"
-      - PORT=3000
-    volumes:
-      - ./files:/home/app/files
-
-  rabbitmq:
-    image: "rabbitmq:3-management" # Use RabbitMQ with management console
-    ports:
-      - "15672:15672" # Management console port
-      - "5672:5672" # RabbitMQ default port
-    environment:
-      - RABBITMQ_DEFAULT_USER=your_user # RabbitMQ username (change this)
-      - RABBITMQ_DEFAULT_PASS=your_password # RabbitMQ password (change this)
-
-version: '3'
-services:
-  express-app:
-    build:
-      context: . # Use the current directory (where the Dockerfile is located)
-    ports:
-      - "3000:3000" # Map the container's port 3000 to the host's port 3000
-    depends_on:
-      - rabbitmq
-    environment:
-      - DB_URL=${DB_URL}
-      - DEEPGRAM_API_KEY=${DEEPGRAM_API_KEY}
-      - RABBIT_URL="amqp://localhost"
+      - RABBIT_URL=${RABBIT_URL}
       - PORT=${PORT}
     volumes:
       - ./files:/home/app/files
 
   rabbitmq:
+    hostname: rabbit
+    command: sh -c "rabbitmq-plugins enable rabbitmq_management; rabbitmq-server"
     image: "rabbitmq:3-management" # Use RabbitMQ with management console
     ports:
       - "15672:15672" # Management console port
       - "5672:5672" # RabbitMQ default port
     environment:
-      - RABBITMQ_DEFAULT_USER=your_user # RabbitMQ username (change this)
-      - RABBITMQ_DEFAULT_PASS=your_password # RabbitMQ password (change this)
+      - RABBITMQ_DEFAULT_USER=guest
+      - RABBITMQ_DEFAULT_PASS=guest
+    volumes:
+      - "./rabbitmq_log:/var/log/rabbitmq"
+      - "./rabbitmq_data:/var/lib/rabbitmq"
+      - "./data:/var/lib/rabbitmq/mnesia/"

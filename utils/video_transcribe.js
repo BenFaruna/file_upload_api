@@ -2,7 +2,9 @@ const fs = require('fs')
 const { execSync: exec } = require('child_process')
 const { Deepgram } = require('@deepgram/sdk')
 const ffmpegStatic = require('ffmpeg-static')
-const path = require("path")
+// const path = require("path")
+
+require("dotenv").config()
 
 
 const DEEPGRAM_API_KEY = process.env.DEEPGRAM_API_KEY;

@@ -1,5 +1,5 @@
 const amqp = require("amqplib");
-const path = require("path")
+const path = require("path");
 
 const VideoModel = require("../model/video");
 const transcribeLocalVideo = require("./video_transcribe");

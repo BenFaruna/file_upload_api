@@ -10,4 +10,6 @@ COPY . .
 
 EXPOSE 3000
 
-CMD ["npm", "run", "send-receive"]
+EXEC "chmod u+x start.sh"
+
+CMD ["./start.sh"]

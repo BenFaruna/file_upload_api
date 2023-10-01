@@ -1,4 +1,7 @@
 node_modules
+rabbitmq_data
+rabbitmq_log
 .vscode
 .env
 files
+data
