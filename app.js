@@ -8,10 +8,11 @@ const { getAllVideos, getVideoById, getVideoFile, uploadVideo, deleteVideoById }
 const { filesPayloadExists, fileExtLimiter } = require("./middleware/file_upload");
 
 const app = express();
-const router = express.Router();
 
 // app.use(express.static("files"))
 app.use(cors());
+
+const router = express.Router();
 
 app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "index.html"))
