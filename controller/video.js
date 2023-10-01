@@ -3,7 +3,7 @@ const path = require("path");
 const uuidv4 = require("uuid").v4;
 const ImageModel = require("../model/video");
 
-const sendVideoDetailToQueue = require("../utils/sender");
+const sendVideoDetailToQueue = require("../utils/producer");
 
 
 const getVideoFile = async (req, res) => {
@@ -56,7 +56,7 @@ const uploadVideo = async (req, res) => {
         const filePath = path.join(__dirname, "..", "files", imageName);
         const image = new ImageModel({ url: fileUrl});
         await image.save()
-            .then((data) => {
+            .then(async (data) => {
                 file[key].mv(filePath)
                 sendVideoDetailToQueue(data);
                 return res.status(201).json({ status: "success", data: data.toJSON() });

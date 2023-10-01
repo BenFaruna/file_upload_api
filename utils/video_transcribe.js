@@ -21,7 +21,7 @@ async function ffmpeg(command) {
 }
 
 async function transcribeLocalVideo(filePath) {
-  ffmpeg(`-hide_banner -y -i "${filePath}" "${filePath}.wav"`)
+  await ffmpeg(`-hide_banner -y -i "${filePath}" "${filePath}.wav"`)
 
   const audioFile = {
     buffer: fs.readFileSync(`${filePath}.wav`),

@@ -10,6 +10,4 @@ COPY . .
 
 EXPOSE 3000
 
-RUN "chmod u+x ./start.sh"
-
 CMD ["./start.sh"]
