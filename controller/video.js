@@ -82,17 +82,15 @@ const deleteVideoById = async(req, res) => {
 
             fs.unlink(path.join(__dirname, "..", "files", filePath), (err) => {
                 if (err) {
-                    throw new Error("Could not delete video from file storage");
+                    console.error(`Could not delete video ${videoId} from file storage`);
                 }
             });
             await data.deleteOne()
             return res.status(200).json({ status: "success", message: `${videoId} deleted` })
         })
         .catch((err) => {
-            console.log(err)
             return res.status(500).json({ status: "error", message: err });
         });
-    // return res.status(200).json({ message: "success", data: [] });
 }
 
 
