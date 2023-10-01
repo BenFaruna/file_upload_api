@@ -7,6 +7,10 @@ module.exports = {
         options: {
             url: process.env.REDIS_URL,
             connect_timeout: 3600000,
+            socket: {
+                reconnectStrategy: retries => Math.min(retries * 50, 1000),
+                keepAlive: true,
+            },
         },
     },
     logger: {

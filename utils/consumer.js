@@ -46,7 +46,7 @@ const messageHandler = async (msg, cb) => {
 
    addTranscriptionToDB(payload)
     .then((data) => {
-      console.log(data);
+      console.log("Data transcription complete", data);
       cb(null, true); // acknowledging the message
     })
     .catch((err) => {
