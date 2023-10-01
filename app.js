@@ -2,7 +2,7 @@
  * @swagger
  * components:
  *   schemas:
- *     VideoModel:
+ *     Video:
  *       type: object
  *       required:
  *         - url
@@ -24,12 +24,12 @@
 /**
  * @swagger
  * tags:
- *   name: VideoModel
+ *   name: Video
  *   description: the video manageing API
  * /api/videos:
  *    get:
  *      summary: Lists all the videos
- *      tags: [VideoModel]
+ *      tags: [Video]
  *      responses:
  *        200:
  *          description: The list of videos
@@ -46,18 +46,19 @@
  *                      message:
  *                        type: string
  *                      data:
-  *                       $ref: '#/components/schemas/VideoModel'
+ *                        type:
+ *                          $ref: '#/components/schemas/Video'
  *    post:
  *      summary: Uploads a videos
- *      tags: [VideoModel]
+ *      tags: [Video]
  *      requestBody:
  *        required: true
  *        content:
  *          video/*:
- *            schema:
- *              filename:
+ *            parameters:
+ *              - in: formData
+ *                name: upFile
  *                type: file
- *                format: binary
  *      responses:
  *        200:
  *          description: The details of the uploaded video
@@ -68,32 +69,56 @@
  *                items:
  *                  message:
  *                    type: string
- *                  $ref: '#/components/schemas/VideoModel'
- *
+ *                  $ref: '#/components/schemas/Video'
  * /api/videos/{id}:
- *    get:
- *      summary: Lists details of specific video
- *      tags: [VideoModel]
- *      parameters:
- *        - in: path
- *          name: id
- *          schema:
- *            type: string
- *          required: true
- *          decription: the video id
- *          content:
- *            application/json:
- *              schema:
- *                @ref: '#components/schemas/VideoModel'
- *      responses:
- *        200:
- *          description: Details of specific video
- *          content:
- *            application/json:
- *              schema:
- *                type: object
- *                items:
- *                  $ref: '#/components/schemas/VideoModel'
+ *   get:
+ *     summary: lists details of specific video
+ *     tags: [Video]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: the video id
+ *     responses:
+ *       200:
+ *         description: the details of a specific video
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               items:
+ *                 $ref: '#components/schemas/Video'
+ *       404:
+ *         description: the video was not found
+ *   delete:
+ *     summary: deletes video details
+ *     tags: [Video]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         schema:
+ *           type: string
+ *         required: truez
+ *         description: the video id
+ *     responses:
+ *       200:
+ *         description: video deleted succesfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               items:
+ *                 status:
+ *                   type: string
+ *                 message:
+ *                   type: string
+ *       404:
+ *         description: the video was not found
+ *       500:
+ *         description: the server had issues deleting the server file
+ *      
  */
 
 const express = require("express");
